@@ -1,0 +1,22 @@
+{
+  "name": "anindasms",
+  "version": "1.0.0",
+  "description": "Official Node.js SDK for AnindaSMS SMS verification API",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sms",
+    "otp",
+    "verification",
+    "anindasms",
+    "api"
+  ],
+  "author": "AnindaSMS <destek@anindasms.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

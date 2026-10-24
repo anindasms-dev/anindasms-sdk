@@ -1,0 +1,22 @@
+{
+    "name": "anindasms/sdk",
+    "description": "Official PHP SDK for AnindaSMS SMS verification API",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "AnındaSMS",
+            "homepage": "https://anindasms.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "AnindaSms\\": "src/"
+        }
+    }
+}
