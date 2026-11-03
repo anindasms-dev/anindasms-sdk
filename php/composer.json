@@ -1,6 +1,6 @@
 {
     "name": "anindasms/sdk",
-    "description": "Official PHP SDK for AnindaSMS SMS verification API",
+    "description": "Official PHP SDK for AnindaSMS API (SMS Verification, Rental, Proxy, eSIM, Temporary Mail)",
     "type": "library",
     "license": "MIT",
     "authors": [

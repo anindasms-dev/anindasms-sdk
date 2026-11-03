@@ -325,6 +325,204 @@ curl -X POST "https://anindasms.com/api/v1/order/58231/done" \
 
 ---
 
+### 9. Number Rental (Rent) API Endpoints
+Rent dedicated numbers for extended durations (4 hours up to 30 days) and receive multiple inbound SMS messages during the rental window.
+
+#### A. Rental Durations (GET /rent/durations)
+`ash
+curl -X GET "https://anindasms.com/api/v1/rent/durations" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+`
+
+#### B. Available Rental Countries (GET /rent/countries)
+`ash
+curl -X GET "https://anindasms.com/api/v1/rent/countries?duration=24" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+`
+
+#### C. Rental Services & Quotes (GET /rent/services, GET /rent/prices)
+`ash
+curl -X GET "https://anindasms.com/api/v1/rent/services?country=62&duration=24" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+
+curl -X GET "https://anindasms.com/api/v1/rent/prices?service=wa&country=62&duration=24" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+`
+
+#### D. Rent Number (POST /rent/buy)
+`ash
+curl -X POST "https://anindasms.com/api/v1/rent/buy" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"service":"wa","country":"62","duration":24}'
+`
+**Sample Response:**
+`json
+{
+  "success": true,
+  "data": {
+    "order_id": 74102,
+    "phone": "+905559876543",
+    "service": "wa",
+    "country": "62",
+    "duration": 24,
+    "cost": 125.0,
+    "balance": 250.0,
+    "status": "waiting",
+    "expires_at": "2026-10-25 14:00:00"
+  }
+}
+`
+
+#### E. Rental Orders & Polling SMS List (GET /rent/orders, GET /rent/orders/{id})
+`ash
+curl -X GET "https://anindasms.com/api/v1/rent/orders" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+
+curl -X GET "https://anindasms.com/api/v1/rent/orders/74102" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+`
+
+#### F. Cancel or Reactivate Rental (POST /rent/orders/{id}/cancel, POST /rent/orders/{id}/reactivate)
+`ash
+# Cancel within the first 20 minutes if no SMS arrived
+curl -X POST "https://anindasms.com/api/v1/rent/orders/74102/cancel" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+
+# Reactivate / extend same rented number
+curl -X POST "https://anindasms.com/api/v1/rent/orders/74102/reactivate" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"duration":24}'
+`
+
+---
+
+### 10. Proxy API Endpoints
+Datacenter, Residential, IPv6, and Mobile rotating proxies.
+
+#### A. Proxy Types & Countries (GET /proxy/types, GET /proxy/countries)
+`ash
+curl -X GET "https://anindasms.com/api/v1/proxy/types" -H "Authorization: Bearer YOUR_API_KEY"
+curl -X GET "https://anindasms.com/api/v1/proxy/countries?type=datacenter" -H "Authorization: Bearer YOUR_API_KEY"
+`
+
+#### B. Price Calculation (GET /proxy/price)
+`ash
+curl -X GET "https://anindasms.com/api/v1/proxy/price?type=datacenter&country=TR&period=30&quantity=1" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+`
+
+#### C. Buy Proxy (POST /proxy/buy)
+`ash
+curl -X POST "https://anindasms.com/api/v1/proxy/buy" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"type":"datacenter","country":"TR","period":30,"quantity":1}'
+`
+**Sample Response:**
+`json
+{
+  "success": true,
+  "data": {
+    "order_id": 1042,
+    "proxy_type": "datacenter",
+    "ip": "185.193.124.50",
+    "port": 8080,
+    "username": "user_1042",
+    "password": "sec_984f2b",
+    "expires_at": "2026-11-24 14:00:00"
+  }
+}
+`
+
+#### D. Proxy Orders & Details (GET /proxy/orders, GET /proxy/orders/{id})
+`ash
+curl -X GET "https://anindasms.com/api/v1/proxy/orders" -H "Authorization: Bearer YOUR_API_KEY"
+curl -X GET "https://anindasms.com/api/v1/proxy/orders/1042" -H "Authorization: Bearer YOUR_API_KEY"
+`
+
+---
+
+### 11. eSIM API Endpoints
+High-speed travel and global eSIM data packages for 150+ countries.
+
+#### A. eSIM Countries & Packages (GET /esim/countries, GET /esim/packages)
+`ash
+curl -X GET "https://anindasms.com/api/v1/esim/countries" -H "Authorization: Bearer YOUR_API_KEY"
+curl -X GET "https://anindasms.com/api/v1/esim/packages?country=TR" -H "Authorization: Bearer YOUR_API_KEY"
+`
+
+#### B. Buy eSIM Package (POST /esim/buy)
+`ash
+curl -X POST "https://anindasms.com/api/v1/esim/buy" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"package_id":"pkg_tr_1gb_7d","quantity":1}'
+`
+**Sample Response:**
+`json
+{
+  "success": true,
+  "data": {
+    "order_id": 329,
+    "iccid": "8985231024829102481",
+    "qr_code_url": "https://anindasms.com/uploads/esim/qr_329.png",
+    "lpa_string": "LPA:1$rsp.example.com$MATCHING_ID_329",
+    "status": "active"
+  }
+}
+`
+
+#### C. eSIM Orders & Topup (GET /esim/orders/{id}, POST /esim/orders/{id}/topup)
+`ash
+curl -X GET "https://anindasms.com/api/v1/esim/orders/329" -H "Authorization: Bearer YOUR_API_KEY"
+curl -X POST "https://anindasms.com/api/v1/esim/orders/329/topup" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"package_id":"pkg_tr_1gb_7d"}'
+`
+
+---
+
+### 12. Temporary Mail API Endpoints
+Disposable inboxes with instant message retrieval.
+
+#### A. Mail Domains & Create Mailbox (GET /mail/domains, POST /mail/create)
+`ash
+curl -X GET "https://anindasms.com/api/v1/mail/domains" -H "Authorization: Bearer YOUR_API_KEY"
+curl -X POST "https://anindasms.com/api/v1/mail/create" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"duration":60}'
+`
+**Sample Response:**
+`json
+{
+  "success": true,
+  "data": {
+    "order_id": 892,
+    "email": "box_892@fastinbox.net",
+    "cost": 5.0,
+    "expires_at": "2026-10-24 15:00:00"
+  }
+}
+`
+
+#### B. Read Inbox Messages (GET /mail/orders/{id}/messages)
+`ash
+curl -X GET "https://anindasms.com/api/v1/mail/orders/892/messages" -H "Authorization: Bearer YOUR_API_KEY"
+`
+
+#### C. Extend or Cancel Mailbox (POST /mail/orders/{id}/extend, POST /mail/orders/{id}/cancel)
+`ash
+curl -X POST "https://anindasms.com/api/v1/mail/orders/892/extend" -H "Authorization: Bearer YOUR_API_KEY" -d '{"duration":60}'
+curl -X POST "https://anindasms.com/api/v1/mail/orders/892/cancel" -H "Authorization: Bearer YOUR_API_KEY"
+`
+
+
+---
+
 ## 🔄 Order Lifecycle & Statuses
 
 | Status | Description |

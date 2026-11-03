@@ -1,7 +1,7 @@
 {
   "name": "anindasms",
   "version": "1.0.0",
-  "description": "Official Node.js SDK for AnindaSMS SMS verification API",
+  "description": "Official Node.js SDK for AnindaSMS API (SMS Verification, Rental, Proxy, eSIM, Temporary Mail)",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
@@ -12,7 +12,11 @@
     "otp",
     "verification",
     "anindasms",
-    "api"
+    "api",
+    "proxy",
+    "esim",
+    "rent",
+    "temporary-mail"
   ],
   "author": "AnindaSMS <destek@anindasms.com>",
   "license": "MIT",

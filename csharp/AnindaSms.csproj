@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net6.0;net8.0</TargetFrameworks>
+    <PackageId>AnindaSms</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>AnındaSMS</Authors>
+    <Company>AnındaSMS</Company>
+    <Description>Official .NET SDK for AnindaSMS API (SMS Verification, Rental, Proxy, eSIM, Temporary Mail)</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://anindasms.com/api</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/anindasms-dev/anindasms-sdk</RepositoryUrl>
+    <PackageTags>sms;otp;verification;anindasms;proxy;esim;tempmail;rent</PackageTags>
+    <LangVersion>latest</LangVersion>
+    <Nullable>annotations</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+  </ItemGroup>
+
+</Project>
+
