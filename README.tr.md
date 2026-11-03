@@ -3,6 +3,7 @@
 [![API Sürümü](https://img.shields.io/badge/API-v1-blue.svg)](https://anindasms.com/api)
 [![Ülke](https://img.shields.io/badge/%C3%9Clke-200%2B-orange.svg)](https://anindasms.com/api)
 [![Servis](https://img.shields.io/badge/Servis-5000%2B-red.svg)](https://anindasms.com/api)
+[![Özellikler](https://img.shields.io/badge/%C3%96zellikler-SMS%20%7C%20Kiralama%20%7C%20Proxy%20%7C%20eSIM%20%7C%20Mail-success.svg)](https://anindasms.com/api)
 [![Lisans: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B%20%7C%208.x-8892BF.svg)](php/)
 [![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB.svg)](python/)
@@ -10,36 +11,64 @@
 [![.NET](https://img.shields.io/badge/.NET-6.0%2B-512BD4.svg)](csharp/)
 [![Go](https://img.shields.io/badge/Go-1.18%2B-00ADD8.svg)](go/)
 
-> 🌍 **Dil / Language:** [🇬🇧 Switch to English Documentation (README.md)](README.md) | **Türkçe**
+> 🌍 **Dil / Language:** **Türkçe** | [🇬🇧 Switch to English Documentation (README.md)](README.md)
 
-Bu depo, [AnındaSMS](https://anindasms.com) platformunun **REST API v1** uç noktalarının detaylı dokümantasyonunu ve 5 farklı dilde hazırlanmış resmi açık kaynak istemci kütüphanelerini (**SDK**) içerir. AnındaSMS, **200'den fazla ülke** ve **5000'den fazla online servis** için tek kullanımlık sanal SMS doğrulama numaraları sağlar.
+Bu depo, [AnındaSMS](https://anindasms.com) platformunun **REST API v1** uç noktalarının detaylı dokümantasyonunu ve 5 farklı dilde hazırlanmış resmi açık kaynak istemci kütüphanelerini (**SDK**) içerir. AnındaSMS, geliştiriciler için tek bir çatı altında 5 temel servis sunar:
+
+* 📱 **SMS Onay (Sanal Numara):** **200'den fazla ülke** ve **5000'den fazla online servis** için tek kullanımlık SMS onay numaraları.
+* ⏳ **Numara Kiralama (Rent API):** **4 saatten 30 güne kadar**, aynı numaraya sınırsız sayıda SMS alabileceğiniz tahsisli numaralar.
+* 🛡️ **Yüksek Hızlı Proxyler:** Datacenter, Residential (Ev/ISP), IPv6 ve Dönen 4G/5G Mobil proxy seçenekleri.
+* 📶 **Global eSIM Paketleri:** **150+ ülke** için anında QR kod ve LPA formatında teslim edilen dijital seyahat internet paketleri.
+* 📬 **Geçici Mail:** Webhook bildirimleri ve anlık API okuması destekli, tek kullanımlık ve programlanabilir e-posta kutuları.
 
 ---
 
 ## 📑 İçindekiler
+
 1. [API Genel Bilgileri](#-api-genel-bilgileri)
    - [Temel URL (Base URL)](#temel-url-base-url)
    - [Kimlik Doğrulama (Authentication)](#kimlik-doğrulama-authentication)
    - [Standart Yanıt Formatı](#standart-yanıt-formatı)
-   - [Rate Limit (Hız Sınırları)](#rate-limit-hız-sınırları)
-2. [REST API Uç Noktaları (Endpoints)](#-rest-api-uç-noktaları)
-   - [1. Hesap Bilgileri (`GET /me`)](#1-hesap-bilgileri-get-me)
-   - [2. Bakiye Sorgulama (`GET /balance`)](#2-bakiye-sorgulama-get-balance)
-   - [3. Aktif Servis Listesi (`GET /services`)](#3-aktif-servis-listesi-get-services)
-   - [4. Fiyat ve Stok Sorgulama (`GET /prices`)](#4-fiyat-ve-stok-sorgulama-get-prices)
-   - [5. Numara Siparişi Oluşturma (`POST /order`)](#5-numara-siparişi-oluşturma-post-order)
-   - [6. Sipariş ve SMS Kodu Sorgulama (`GET /order/{id}`)](#6-sipariş-ve-sms-kodu-sorgulama-get-orderid)
-   - [7. Sipariş İptali (`POST /order/{id}/cancel`)](#7-sipariş-iptali-post-orderidcancel)
-   - [8. Siparişi Tamamlama (`POST /order/{id}/done`)](#8-siparişi-tamamlama-post-orderiddone)
-3. [Sipariş Yaşam Döngüsü & Durumlar](#-sipariş-yaşam-döngüsü--durumlar)
-4. [Hata Kodları](#-hata-kodları)
-5. [Resmi SDK Kütüphaneleri](#-resmi-sdk-kütüphaneleri)
-   - [PHP](#-php-sdk)
-   - [Python](#-python-sdk)
-   - [Node.js](#-nodejs-sdk)
-   - [C# / .NET](#-c--net-sdk)
-   - [Go](#-go-sdk)
-6. [Lisans & Destek](#-lisans--destek)
+   - [Rate Limit (İstek Sınırları)](#rate-limit-istek-sınırları)
+2. [Hesap API Uç Noktaları](#-hesap-api-uç-noktaları)
+   - [Kullanıcı Profili (`GET /me`)](#1-kullanıcı-profili-get-me)
+   - [Bakiye Sorgulama (`GET /balance`)](#2-bakiye-sorgulama-get-balance)
+3. [SMS Onay API](#-sms-onay-api)
+   - [Aktif Servis Listesi (`GET /services`)](#3-aktif-servis-listesi-get-services)
+   - [Ülke Fiyatları ve Stok (`GET /prices`)](#4-ülke-fiyatları-ve-stok-get-prices)
+   - [Numara Siparişi Oluştur (`POST /order`)](#5-numara-siparişi-oluştur-post-order)
+   - [Sipariş Durumu ve SMS Kodu (`GET /order/{id}`)](#6-sipariş-durumu-ve-sms-kodu-get-orderid)
+   - [Sipariş İptali ve İade (`POST /order/{id}/cancel`)](#7-sipariş-iptali-ve-iade-post-orderidcancel)
+   - [Siparişi Tamamla (`POST /order/{id}/done`)](#8-siparişi-tamamla-post-orderiddone)
+4. [Numara Kiralama (Rent) API](#-numara-kiralama-rent-api)
+   - [Kiralama Süreleri (`GET /rent/durations`)](#kiralama-süreleri-get-rentdurations)
+   - [Kullanılabilir Ülkeler (`GET /rent/countries`)](#kullanılabilir-ülkeler-get-rentcountries)
+   - [Servisler ve Fiyat Teklifi (`GET /rent/services`, `GET /rent/prices`)](#servisler-ve-fiyat-teklifi-get-rentservices-get-rentprices)
+   - [Numara Kirala (`POST /rent/buy`)](#numara-kirala-post-rentbuy)
+   - [Kiralık Siparişler ve Gelen SMS Listesi (`GET /rent/orders`, `GET /rent/orders/{id}`)](#kiralık-siparişler-ve-gelen-sms-listesi-get-rentorders-get-rentordersid)
+   - [İptal veya Süre Uzatma (`POST /rent/orders/{id}/cancel`, `POST /rent/orders/{id}/reactivate`)](#iptal-veya-süre-uzatma-post-rentordersidcancel-post-rentordersidreactivate)
+5. [Proxy API](#-proxy-api)
+   - [Proxy Tipleri ve Ülkeler (`GET /proxy/types`, `GET /proxy/countries`)](#proxy-tipleri-ve-ülkeler-get-proxytypes-get-proxycountries)
+   - [Fiyat Teklifi Hesaplama (`GET /proxy/price`)](#fiyat-teklifi-hesaplama-get-proxyprice)
+   - [Proxy Satın Al (`POST /proxy/buy`)](#proxy-satın-al-post-proxybuy)
+   - [Proxy Siparişleri (`GET /proxy/orders`, `GET /proxy/orders/{id}`)](#proxy-siparişleri-get-proxyorders-get-proxyordersid)
+6. [eSIM API](#-esim-api)
+   - [eSIM Ülkeleri ve Paketleri (`GET /esim/countries`, `GET /esim/packages`)](#esim-ülkeleri-ve-paketleri-get-esimcountries-get-esimpackages)
+   - [eSIM Paketi Satın Al (`POST /esim/buy`)](#esim-paketi-satın-al-post-esimbuy)
+   - [eSIM Detayı ve Bakiye Yükleme (`GET /esim/orders/{id}`, `POST /esim/orders/{id}/topup`)](#esim-detayı-ve-bakiye-yükleme-get-esimordersid-post-esimordersidtopup)
+7. [Geçici Mail API](#-geçici-mail-api)
+   - [Domain Listesi ve Mail Kutusu Oluşturma (`GET /mail/domains`, `POST /mail/create`)](#domain-listesi-ve-mail-kutusu-oluşturma-get-maildomains-post-mailcreate)
+   - [Gelen Kutusu Mesajlarını Okuma (`GET /mail/orders/{id}/messages`)](#gelen-kutusu-mesajlarını-okuma-get-mailordersidmessages)
+   - [Süre Uzatma veya İptal (`POST /mail/orders/{id}/extend`, `POST /mail/orders/{id}/cancel`)](#süre-uzatma-veya-iptal-post-mailordersidextend-post-mailordersidcancel)
+8. [Sipariş Yaşam Döngüsü & Durumlar](#-sipariş-yaşam-döngüsü--durumlar)
+9. [Hata Kodları Referansı](#-hata-kodları-referansı)
+10. [Resmi SDK İstemcileri](#-resmi-sdk-istemcileri)
+    - [PHP](#-php-sdk)
+    - [Python](#-python-sdk)
+    - [Node.js](#-nodejs-sdk)
+    - [C# / .NET](#-c--net-sdk)
+    - [Go](#-go-sdk)
+11. [Lisans & Destek](#-lisans--destek)
 
 ---
 
@@ -52,9 +81,9 @@ https://anindasms.com/api/v1
 ```
 
 ### Kimlik Doğrulama (Authentication)
-API anahtarınızı [anindasms.com/profile](https://anindasms.com/profile) sayfasından oluşturabilirsiniz.
+API anahtarınızı [anindasms.com/profile](https://anindasms.com/profile) adresindeki panelinizden temin edebilirsiniz.
 
-Anahtarınızı her istekte HTTP başlığı (header) olarak iletmeniz gerekir. İki yöntem desteklenir:
+Her istekte API anahtarınızı HTTP başlığı (`Header`) ile gönderiniz:
 ```http
 Authorization: Bearer SIZIN_API_KEYINIZ
 ```
@@ -62,12 +91,13 @@ veya
 ```http
 X-API-Key: SIZIN_API_KEYINIZ
 ```
-> 🔒 **Güvenlik Notu:** Güvenlik gerekçesiyle `api_key` değerini URL parametresinde (`?api_key=...`) veya istek gövdesinde göndermeyin. Bu tür istekler `401 Unauthorized` ile reddedilir.
+
+> 🔒 **Güvenlik Uyarısı:** API anahtarınızı URL sorgu parametrelerinde taşımayınız ve herkese açık kod depolarına yüklemeyiniz.
 
 ### Standart Yanıt Formatı
-Tüm yanıtlar UTF-8 kodlamasında JSON olarak döner:
+Tüm yanıtlar UTF-8 formatında JSON olarak döndürülür:
 
-**Başarılı Yanıt:**
+**Başarılı Yanıt (`HTTP 200 / 201`):**
 ```json
 {
   "success": true,
@@ -75,7 +105,7 @@ Tüm yanıtlar UTF-8 kodlamasında JSON olarak döner:
 }
 ```
 
-**Hatalı Yanıt:**
+**Hatalı Yanıt (`HTTP 4xx / 5xx`):**
 ```json
 {
   "success": false,
@@ -84,55 +114,28 @@ Tüm yanıtlar UTF-8 kodlamasında JSON olarak döner:
 }
 ```
 
-### Rate Limit (Hız Sınırları)
-Sistem kararlılığı için istekler dakika bazında sınırlandırılmıştır:
-* **Genel İstekler:** Dakikada maksimum **120 istek**
-* **Sipariş Oluşturma (`POST /order`):** Dakikada maksimum **30 istek**
-
-İstek yanıtlarında hız limitinizi takip edebileceğiniz başlıklar yer alır:
-* `X-RateLimit-Limit`: İzin verilen dakikalık toplam istek sayısı.
-* `X-RateLimit-Remaining`: Mevcut dakikada kalan istek hakkınız.
-* `X-RateLimit-Reset`: Sayacın sıfırlanacağı Unix zaman damgası.
+### Rate Limit (İstek Sınırları)
+* **Genel Limit:** 120 istek / dakika
+* **Sipariş Oluşturma:** 30 istek / dakika
+* Başlıklar: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`
 
 ---
 
-## 📡 REST API Uç Noktaları
+## 👤 Hesap API Uç Noktaları
 
-### 1. Hesap Bilgileri (`GET /me`)
-Hesap ID'si, kullanıcı adı, kayıtlı e-posta, anlık bakiye ve API anahtarı meta verilerini döndürür.
-
+### 1. Kullanıcı Profili (`GET /me`)
+Kullanıcı ID, e-posta, mevcut bakiye ve kayıt tarihi bilgilerini döner.
 ```bash
 curl -X GET "https://anindasms.com/api/v1/me" \
   -H "Authorization: Bearer SIZIN_API_KEYINIZ"
 ```
 
-**Örnek Yanıt:**
-```json
-{
-  "success": true,
-  "data": {
-    "id": 2,
-    "username": "kullaniciadi",
-    "email": "kullanici@example.com",
-    "balance": 150.00,
-    "currency": "TRY",
-    "api_key_prefix": "abab247a",
-    "api_key_created_at": "2026-10-24 12:00:00",
-    "api_key_last_used_at": "2026-10-24 15:30:10"
-  }
-}
-```
-
----
-
 ### 2. Bakiye Sorgulama (`GET /balance`)
-Hesaptaki mevcut kullanılabilir bakiyeyi döner.
-
+Güncel hesap bakiyesini döner.
 ```bash
 curl -X GET "https://anindasms.com/api/v1/balance" \
   -H "Authorization: Bearer SIZIN_API_KEYINIZ"
 ```
-
 **Örnek Yanıt:**
 ```json
 {
@@ -147,81 +150,30 @@ curl -X GET "https://anindasms.com/api/v1/balance" \
 
 ---
 
-### 3. Aktif Servis Listesi (`GET /services`)
-Sistemde aktif olarak SMS onayı alınabilen tüm servislerin kodlarını ve adlarını döndürür.
+## 📱 SMS Onay API
 
+### 3. Aktif Servis Listesi (`GET /services`)
+SMS onayı desteklenen tüm servislerin listesini döner.
 ```bash
 curl -X GET "https://anindasms.com/api/v1/services" \
   -H "Authorization: Bearer SIZIN_API_KEYINIZ"
 ```
 
-**Örnek Yanıt:**
-```json
-{
-  "success": true,
-  "data": {
-    "services": [
-      { "code": "wa", "name": "WhatsApp" },
-      { "code": "tg", "name": "Telegram" },
-      { "code": "go", "name": "Google / Gmail" },
-      { "code": "ig", "name": "Instagram" },
-      { "code": "ds", "name": "Discord" },
-      { "code": "tt", "name": "TikTok" },
-      { "code": "oi", "name": "OpenAI / ChatGPT" }
-    ]
-  }
-}
-```
-
----
-
-### 4. Fiyat ve Stok Sorgulama (`GET /prices`)
-Belirli bir servis için veya tüm servisler için ülke bazlı anlık fiyat ve stok durumunu listeler.
-
-**Parametreler (Query String):**
-* `service` (string, zorunlu): Servis kodu (örn: `wa`, `tg`)
-* `country` (string, opsiyonel): Ülke kodu (örn: `62`, `tr`)
-
+### 4. Ülke Fiyatları ve Stok (`GET /prices`)
+Belirli bir servis veya ülke için güncel fiyat ve stok durumunu döner.
 ```bash
 curl -X GET "https://anindasms.com/api/v1/prices?service=wa&country=62" \
   -H "Authorization: Bearer SIZIN_API_KEYINIZ"
 ```
 
-**Örnek Yanıt:**
-```json
-{
-  "success": true,
-  "data": {
-    "service": "wa",
-    "prices": [
-      {
-        "country": "62",
-        "country_name": "Endonezya",
-        "price": 12.50,
-        "count": 482
-      }
-    ]
-  }
-}
-```
-
----
-
-### 5. Numara Siparişi Oluşturma (`POST /order`)
-Belirtilen servis ve ülke için yeni bir sanal numara tahsis eder. Bakiye hesabınızdan rezerve edilir.
-
-**Gövde (JSON):**
-* `service` (string, zorunlu): Servis kodu (örn: `"wa"`)
-* `country` (string, zorunlu): Ülke kodu (örn: `"62"`)
-* `operator` (string, opsiyonel): Belirli bir operatör tercihi
-
+### 5. Numara Siparişi Oluştur (`POST /order`)
+Belirtilen servis ve ülke için geçici sanal numara tahsis eder.
 ```bash
 curl -X POST "https://anindasms.com/api/v1/order" \
   -H "Authorization: Bearer SIZIN_API_KEYINIZ" \
   -H "Content-Type: application/json" \
-  -d '{"service":"wa", "country":"62"}'
+  -d '{"service":"wa","country":"62"}'
 ```
-
 **Örnek Yanıt:**
 ```json
 {
@@ -231,133 +183,77 @@ curl -X POST "https://anindasms.com/api/v1/order" \
     "phone": "+628123456789",
     "country": "62",
     "service": "wa",
-    "price": 12.50,
-    "status": "pending",
-    "expires_at": 1792845600,
-    "remaining_seconds": 600
+    "cost": 12.50,
+    "status": "waiting",
+    "expires_at": "2026-10-24 14:12:10"
   }
 }
 ```
 
----
-
-### 6. Sipariş ve SMS Kodu Sorgulama (`GET /order/{id}`)
-Tahsis edilen numaranın durumunu ve gelen SMS onay kodunu sorgulamak için kullanılır. SMS kodu gelene kadar belirli aralıklarla (tavsiye: 3-5 saniyede bir) bu uç nokta sorgulanır.
-
+### 6. Sipariş Durumu ve SMS Kodu (`GET /order/{id}`)
+Kod gelene kadar her 3–5 saniyede bir sorgulayın:
 ```bash
 curl -X GET "https://anindasms.com/api/v1/order/58231" \
   -H "Authorization: Bearer SIZIN_API_KEYINIZ"
 ```
-
-**Beklemede Yanıtı (`pending`):**
+**Örnek Yanıt:**
 ```json
 {
   "success": true,
   "data": {
     "order_id": 58231,
-    "phone": "+628123456789",
-    "status": "pending",
-    "sms_code": null,
-    "full_sms": null,
-    "remaining_seconds": 540
-  }
-}
-```
-
-**Kod Geldiğindeki Yanıt (`received`):**
-```json
-{
-  "success": true,
-  "data": {
-    "order_id": 58231,
-    "phone": "+628123456789",
     "status": "received",
-    "sms_code": "489201",
-    "full_sms": "WhatsApp kodunuz: 489-201. Kimseyle paylasmayin.",
-    "remaining_seconds": 490
+    "code": "489201",
+    "sms_text": "WhatsApp doğrulama kodunuz: 489-201"
   }
 }
 ```
 
----
-
-### 7. Sipariş İptali (`POST /order/{id}/cancel`)
-Henüz SMS gelmemiş olan bir siparişi iptal eder. Rezerve edilen ücret **anında ve kesintisiz** olarak hesap bakiyenize iade edilir.
-
+### 7. Sipariş İptali ve İade (`POST /order/{id}/cancel`)
+SMS gelmeden önce siparişi iptal eder ve ücreti anında bakiye olarak iade eder:
 ```bash
 curl -X POST "https://anindasms.com/api/v1/order/58231/cancel" \
   -H "Authorization: Bearer SIZIN_API_KEYINIZ"
 ```
 
-**Örnek Yanıt:**
-```json
-{
-  "success": true,
-  "data": {
-    "order_id": 58231,
-    "status": "cancelled",
-    "message": "Sipariş iptal edildi ve bakiye iade edildi."
-  }
-}
-```
-
----
-
-### 8. Siparişi Tamamlama (`POST /order/{id}/done`)
-SMS kodu başarıyla alındıktan sonra işlemi sonlandırmak için kullanılır.
-
+### 8. Siparişi Tamamla (`POST /order/{id}/done`)
 ```bash
 curl -X POST "https://anindasms.com/api/v1/order/58231/done" \
   -H "Authorization: Bearer SIZIN_API_KEYINIZ"
 ```
 
-**Örnek Yanıt:**
-```json
-{
-  "success": true,
-  "data": {
-    "order_id": 58231,
-    "status": "completed",
-    "message": "Sipariş tamamlandı."
-  }
-}
-```
-
 ---
 
-### 9. Numara Kiralama (Rent) API UÃ§ NoktalarÄ±
-Belirli bir sÃ¼re boyunca (4 saatten 30 gÃ¼ne kadar) numara kiralama ve kiralama sÃ¼resince birden fazla SMS alma.
+## ⏳ Numara Kiralama (Rent) API
 
-#### A. Kiralama SÃ¼releri (GET /rent/durations)
-`ash
-curl -X GET "https://anindasms.com/api/v1/rent/durations" \
-  -H "Authorization: Bearer SIZIN_API_KEYINIZ"
-`
+Aynı numarayı uzun süreliğine kiralayarak sınırsız gelen SMS mesajı alabilirsiniz.
 
-#### B. KiralÄ±k Ãœlke Listesi (GET /rent/countries)
-`ash
-curl -X GET "https://anindasms.com/api/v1/rent/countries?duration=24" \
-  -H "Authorization: Bearer SIZIN_API_KEYINIZ"
-`
+### Kiralama Süreleri (`GET /rent/durations`)
+Kullanılabilir kiralama periyotlarını (saat veya gün) listeler.
+```bash
+curl -X GET "https://anindasms.com/api/v1/rent/durations" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
+```
 
-#### C. Kiralanabilir Servisler ve Fiyatlar (GET /rent/services, GET /rent/prices)
-`ash
-curl -X GET "https://anindasms.com/api/v1/rent/services?country=62&duration=24" \
-  -H "Authorization: Bearer SIZIN_API_KEYINIZ"
+### Kullanılabilir Ülkeler (`GET /rent/countries`)
+```bash
+curl -X GET "https://anindasms.com/api/v1/rent/countries?duration=24" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
+```
 
-curl -X GET "https://anindasms.com/api/v1/rent/prices?service=wa&country=62&duration=24" \
-  -H "Authorization: Bearer SIZIN_API_KEYINIZ"
-`
+### Servisler ve Fiyat Teklifi (`GET /rent/services`, `GET /rent/prices`)
+```bash
+curl -X GET "https://anindasms.com/api/v1/rent/services?country=62&duration=24" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
+curl -X GET "https://anindasms.com/api/v1/rent/prices?service=wa&country=62&duration=24" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
+```
 
-#### D. Numara Kirala (POST /rent/buy)
-`ash
+### Numara Kirala (`POST /rent/buy`)
+```bash
 curl -X POST "https://anindasms.com/api/v1/rent/buy" \
   -H "Authorization: Bearer SIZIN_API_KEYINIZ" \
   -H "Content-Type: application/json" \
   -d '{"service":"wa","country":"62","duration":24}'
-`
-**Ã–rnek YanÄ±t:**
-`json
+```
+**Örnek Yanıt:**
+```json
 {
   "success": true,
   "data": {
@@ -372,56 +268,71 @@ curl -X POST "https://anindasms.com/api/v1/rent/buy" \
     "expires_at": "2026-10-25 14:00:00"
   }
 }
-`
+```
 
-#### E. KiralÄ±k SipariÅŸler ve Gelen SMS Listesi (GET /rent/orders, GET /rent/orders/{id})
-`ash
-curl -X GET "https://anindasms.com/api/v1/rent/orders" \
-  -H "Authorization: Bearer SIZIN_API_KEYINIZ"
+### Kiralık Siparişler ve Gelen SMS Listesi (`GET /rent/orders`, `GET /rent/orders/{id}`)
+```bash
+curl -X GET "https://anindasms.com/api/v1/rent/orders/74102" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
+```
+**Örnek Yanıt:**
+```json
+{
+  "success": true,
+  "data": {
+    "order_id": 74102,
+    "phone": "+905559876543",
+    "status": "received",
+    "remaining": 82400,
+    "sms_list": [
+      {
+        "code": "948210",
+        "text": "WhatsApp doğrulama kodunuz: 948-210",
+        "date": "2026-10-24 14:12:00"
+      }
+    ]
+  }
+}
+```
 
-curl -X GET "https://anindasms.com/api/v1/rent/orders/74102" \
-  -H "Authorization: Bearer SIZIN_API_KEYINIZ"
-`
+### İptal veya Süre Uzatma (`POST /rent/orders/{id}/cancel`, `POST /rent/orders/{id}/reactivate`)
+```bash
+# SMS gelmemişse ilk 20 dakika içinde ücretsiz iptal
+curl -X POST "https://anindasms.com/api/v1/rent/orders/74102/cancel" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
 
-#### F. Ä°ptal ve Yeniden Kiralama (POST /rent/orders/{id}/cancel, POST /rent/orders/{id}/reactivate)
-`ash
-# Ä°lk 20 dk SMS gelmediyse iptal et ve iade al
-curl -X POST "https://anindasms.com/api/v1/rent/orders/74102/cancel" \
-  -H "Authorization: Bearer SIZIN_API_KEYINIZ"
-
-# SÃ¼resi dolan veya bitmek Ã¼zere olan aynÄ± numarayÄ± uzat
+# Aynı numarayı 24 saat daha uzat
 curl -X POST "https://anindasms.com/api/v1/rent/orders/74102/reactivate" \
   -H "Authorization: Bearer SIZIN_API_KEYINIZ" \
   -H "Content-Type: application/json" \
   -d '{"duration":24}'
-`
+```
 
 ---
 
-### 10. Proxy API UÃ§ NoktalarÄ±
-Statik Veri Merkezi, Konut (Residential), IPv6 ve Mobil 4G rotasyonlu proxy hizmeti.
+## 🛡️ Proxy API
 
-#### A. Proxy TÃ¼rleri ve Ãœlkeler (GET /proxy/types, GET /proxy/countries)
-`ash
+Statik Datacenter, Residential (Ev/ISP), IPv6 ve Dönen 4G Mobil proxy seçenekleri.
+
+### Proxy Tipleri ve Ülkeler (`GET /proxy/types`, `GET /proxy/countries`)
+```bash
 curl -X GET "https://anindasms.com/api/v1/proxy/types" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
 curl -X GET "https://anindasms.com/api/v1/proxy/countries?type=datacenter" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
-`
+```
 
-#### B. Fiyat Hesaplama (GET /proxy/price)
-`ash
+### Fiyat Teklifi Hesaplama (`GET /proxy/price`)
+```bash
 curl -X GET "https://anindasms.com/api/v1/proxy/price?type=datacenter&country=TR&period=30&quantity=1" \
   -H "Authorization: Bearer SIZIN_API_KEYINIZ"
-`
+```
 
-#### C. Proxy SatÄ±n Al (POST /proxy/buy)
-`ash
+### Proxy Satın Al (`POST /proxy/buy`)
+```bash
 curl -X POST "https://anindasms.com/api/v1/proxy/buy" \
   -H "Authorization: Bearer SIZIN_API_KEYINIZ" \
   -H "Content-Type: application/json" \
   -d '{"type":"datacenter","country":"TR","period":30,"quantity":1}'
-`
-**Ã–rnek YanÄ±t:**
-`json
+```
+**Örnek Yanıt:**
+```json
 {
   "success": true,
   "data": {
@@ -434,34 +345,35 @@ curl -X POST "https://anindasms.com/api/v1/proxy/buy" \
     "expires_at": "2026-11-24 14:00:00"
   }
 }
-`
+```
 
-#### D. Proxy SipariÅŸleri & Detay (GET /proxy/orders & GET /proxy/orders/{id})
-`ash
+### Proxy Siparişleri (`GET /proxy/orders`, `GET /proxy/orders/{id}`)
+```bash
 curl -X GET "https://anindasms.com/api/v1/proxy/orders" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
 curl -X GET "https://anindasms.com/api/v1/proxy/orders/1042" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
-`
+```
 
 ---
 
-### 11. eSIM API UÃ§ NoktalarÄ±
-150+ Ã¼lke iÃ§in yÃ¼ksek hÄ±zlÄ± kÃ¼resel eSIM veri paketleri.
+## 📶 eSIM API
 
-#### A. eSIM Ãœlkeleri ve Paketler (GET /esim/countries, GET /esim/packages)
-`ash
+150'den fazla ülke için anında teslim edilen dijital seyahat internet paketleri.
+
+### eSIM Ülkeleri ve Paketleri (`GET /esim/countries`, `GET /esim/packages`)
+```bash
 curl -X GET "https://anindasms.com/api/v1/esim/countries" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
 curl -X GET "https://anindasms.com/api/v1/esim/packages?country=TR" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
-`
+```
 
-#### B. eSIM SatÄ±n Al (POST /esim/buy)
-`ash
+### eSIM Paketi Satın Al (`POST /esim/buy`)
+```bash
 curl -X POST "https://anindasms.com/api/v1/esim/buy" \
   -H "Authorization: Bearer SIZIN_API_KEYINIZ" \
   -H "Content-Type: application/json" \
   -d '{"package_id":"pkg_tr_1gb_7d","quantity":1}'
-`
-**Ã–rnek YanÄ±t:**
-`json
+```
+**Örnek Yanıt:**
+```json
 {
   "success": true,
   "data": {
@@ -472,32 +384,33 @@ curl -X POST "https://anindasms.com/api/v1/esim/buy" \
     "status": "active"
   }
 }
-`
+```
 
-#### C. eSIM Detay ve Ek Paket (GET /esim/orders/{id}, POST /esim/orders/{id}/topup)
-`ash
+### eSIM Detayı ve Bakiye Yükleme (`GET /esim/orders/{id}`, `POST /esim/orders/{id}/topup`)
+```bash
 curl -X GET "https://anindasms.com/api/v1/esim/orders/329" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
 curl -X POST "https://anindasms.com/api/v1/esim/orders/329/topup" \
   -H "Authorization: Bearer SIZIN_API_KEYINIZ" \
   -H "Content-Type: application/json" \
   -d '{"package_id":"pkg_tr_1gb_7d"}'
-`
+```
 
 ---
 
-### 12. GeÃ§ici Mail API UÃ§ NoktalarÄ±
-Tek kullanÄ±mlÄ±k gelen kutularÄ± ve anlÄ±k e-posta okuma.
+## 📬 Geçici Mail API
 
-#### A. Alan AdlarÄ± ve Mail Kutusu AÃ§ma (GET /mail/domains, POST /mail/create)
-`ash
+Tek kullanımlık gelen kutusu oluşturma ve anlık gelen e-posta okuma.
+
+### Domain Listesi ve Mail Kutusu Oluşturma (`GET /mail/domains`, `POST /mail/create`)
+```bash
 curl -X GET "https://anindasms.com/api/v1/mail/domains" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
 curl -X POST "https://anindasms.com/api/v1/mail/create" \
   -H "Authorization: Bearer SIZIN_API_KEYINIZ" \
   -H "Content-Type: application/json" \
   -d '{"duration":60}'
-`
-**Ã–rnek YanÄ±t:**
-`json
+```
+**Örnek Yanıt:**
+```json
 {
   "success": true,
   "data": {
@@ -507,60 +420,61 @@ curl -X POST "https://anindasms.com/api/v1/mail/create" \
     "expires_at": "2026-10-24 15:00:00"
   }
 }
-`
+```
 
-#### B. Gelen E-postalarÄ± Okuma (GET /mail/orders/{id}/messages)
-`ash
+### Gelen Kutusu Mesajlarını Okuma (`GET /mail/orders/{id}/messages`)
+```bash
 curl -X GET "https://anindasms.com/api/v1/mail/orders/892/messages" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
-`
+```
 
-#### C. SÃ¼re Uzatma veya Ä°ptal (POST /mail/orders/{id}/extend, POST /mail/orders/{id}/cancel)
-`ash
+### Süre Uzatma veya İptal (`POST /mail/orders/{id}/extend`, `POST /mail/orders/{id}/cancel`)
+```bash
 curl -X POST "https://anindasms.com/api/v1/mail/orders/892/extend" -H "Authorization: Bearer SIZIN_API_KEYINIZ" -d '{"duration":60}'
 curl -X POST "https://anindasms.com/api/v1/mail/orders/892/cancel" -H "Authorization: Bearer SIZIN_API_KEYINIZ"
-`
-
+```
 
 ---
 
 ## 🔄 Sipariş Yaşam Döngüsü & Durumlar
 
-| Durum (`status`) | Açıklama |
+| Durum | Açıklama |
 | :--- | :--- |
-| `pending` | Numara ayrıldı, gelen SMS bekleniyor. |
-| `received` | SMS başarıyla ulaştı. `sms_code` alanında doğrulama kodu mevcuttur. |
-| `cancelled` | Müşteri veya sistem tarafından iptal edildi. Ücret tam iade edildi. |
-| `timeout` | Zaman aşımı (varsayılan 10 dk) doldu. Ücret otomatik olarak hesaba iade edildi. |
-| `completed` | İşlem müşteri tarafından başarıyla onaylandı ve kapatıldı. |
+| `waiting` / `pending` | Numara tahsis edildi. Gelen SMS bekleniyor. |
+| `received` | SMS kodu başarıyla teslim alındı. Doğrulama kodu `code` veya `sms_list` alanında mevcuttur. |
+| `done` / `completed` | Sipariş başarıyla tamamlandı. |
+| `cancelled` | Kullanıcı tarafından iptal edildi. Bakiye anında iade edildi. |
+| `expired` | Süre doldu (SMS gelmedi). Bakiye otomatik olarak hesaba iade edildi. |
 
 ---
 
-## ⚠️ Hata Kodları
+## ⚠️ Hata Kodları Referansı
 
-| HTTP Kodu | Sebep | Açıklama |
+| HTTP Kodu | Hata Nedeni | Açıklama |
 | :--- | :--- | :--- |
-| `400 Bad Request` | Eksik / Geçersiz Parametre | Servis veya ülke parametresi hatalı ya da eksik gönderildi. |
-| `401 Unauthorized` | Kimlik Doğrulama Hatası | API anahtarı eksik, geçersiz veya formatı hatalı. |
-| `402 Payment Required` | Yetersiz Bakiye | Hesabınızdaki bakiye sipariş tutarını karşılamıyor. |
-| `403 Forbidden` | Yetkisiz Erişim | Hesap askıya alınmış veya IP izin listesi dışında bir IP'den istek yapıldı. |
-| `404 Not Found` | Bulunamadı | Belirtilen sipariş ID'si hesaba ait değil veya bulunamadı. |
-| `409 Conflict` | Stok Yok / Durum Çakışması | İlgili ülkede stok tükenmiş veya sipariş zaten kapatılmış. |
-| `429 Too Many Requests`| Rate Limit Aşıldı | Dakikalık istek limiti aşıldı. `Retry-After` süresi kadar bekleyin. |
-| `503 Service Unavailable`| Bakım Modu | Sistem genel bakım çalışmasında. |
+| `400 Bad Request` | Eksik / Geçersiz Parametre | Zorunlu alanlar eksik veya format hatalı. |
+| `401 Unauthorized` | Yetkisiz İstek | API anahtarı eksik, geçersiz veya yetkisiz. |
+| `402 Payment Required`| Yetersiz Bakiye | Hesap bakiyesi işlem tutarından düşük. |
+| `403 Forbidden` | Erişim Reddedildi | Servis kapalı, ülke kısıtlı veya IP engellenmiş. |
+| `404 Not Found` | Kaynak Bulunamadı | Belirtilen sipariş ID veya katalog öğesi bulunamadı. |
+| `409 Conflict` | Stok Tükendi | Talep edilen ülke ve serviste anlık stok bulunmuyor. |
+| `429 Too Many Requests`| İstek Sınırı Aşıldı | Dakikalık istek kotası doldu. `Retry-After` başlığını kontrol edin. |
+| `500 Server Error` | Sunucu / Sağlayıcı Hatası| Üst sağlayıcı veya sunucu hatası. Birkaç saniye sonra tekrar deneyin. |
 
 ---
 
-## 🛠 Resmi SDK Kütüphaneleri
+## 🛠 Resmi SDK İstemcileri
 
-Tüm SDK'lar hazır hata yönetimi ve SMS kodunu sizin yerinize periyodik sorgulayan `waitForCode` metoduna sahiptir.
+Resmi açık kaynak SDK istemcileri tüm 5 servis (SMS Onay, Kiralama, Proxy, eSIM, Geçici Mail) için otomatik tip denetimi, hata yakalama ve otomatik kod bekleme (`wait`) döngüleri sunar.
 
 ### 🐘 PHP SDK
-Kurulum:
+
+**Kurulum:**
 ```bash
 composer config repositories.anindasms vcs https://github.com/anindasms-dev/anindasms-sdk
 composer require anindasms/sdk:dev-main
 ```
-Örnek Kullanım:
+
+**Kullanım Örneği:**
 ```php
 <?php
 require 'vendor/autoload.php';
@@ -569,74 +483,104 @@ use AnindaSms\Client;
 
 $client = new Client('SIZIN_API_KEYINIZ');
 
-// Bakiye sorgula
-$balance = $client->balance();
-echo "Bakiye: " . $balance['formatted'] . PHP_EOL;
-
-// Numara al (WhatsApp, Endonezya)
+// 1. SMS Onay
 $order = $client->createOrder('wa', '62');
-echo "Numara: " . $order['phone'] . " (Sipariş: #" . $order['order_id'] . ")" . PHP_EOL;
-
-// SMS kodunu otomatik bekle
+echo "Telefon: " . $order['phone'] . PHP_EOL;
 $sms = $client->waitForCode($order['order_id']);
-echo "Gelen SMS Kodu: " . $sms['code'] . PHP_EOL;
+echo "SMS Kodu: " . $sms['code'] . PHP_EOL;
 
-// Tamamla
-$client->completeOrder($order['order_id']);
+// 2. Numara Kiralama
+$rent = $client->rentBuy('wa', '62', 24);
+echo "Kiralık Numara: " . $rent['phone'] . PHP_EOL;
+
+// 3. Proxy Satın Al
+$proxy = $client->proxyBuy('datacenter', 'TR', 30, 1);
+echo "Proxy IP: " . $proxy['ip'] . ":" . $proxy['port'] . PHP_EOL;
+
+// 4. eSIM Satın Al
+$esim = $client->esimBuy('pkg_tr_1gb_7d');
+echo "eSIM QR: " . $esim['qr_code_url'] . PHP_EOL;
+
+// 5. Geçici Mail
+$mail = $client->mailCreate(60);
+echo "Geçici E-Posta: " . $mail['email'] . PHP_EOL;
 ```
 
 ---
 
 ### 🐍 Python SDK
-Kurulum:
+
+**Kurulum:**
 ```bash
 pip install "git+https://github.com/anindasms-dev/anindasms-sdk.git#subdirectory=python"
 ```
-Örnek Kullanım:
+
+**Kullanım Örneği:**
 ```python
 from anindasms import Client
 
 client = Client("SIZIN_API_KEYINIZ")
 
-# Bakiye sorgula
-print("Bakiye:", client.balance()["formatted"])
-
-# Numara al
+# 1. SMS Onay
 order = client.create_order("wa", "62")
-print("Numara:", order["phone"])
-
-# SMS kodunu bekle
+print("Telefon:", order["phone"])
 sms = client.wait_for_code(order["order_id"])
 print("SMS Kodu:", sms["code"])
 
-# Tamamla
-client.complete_order(order["order_id"])
+# 2. Numara Kiralama
+rent = client.rent_buy("wa", "62", 24)
+print("Kiralık Numara:", rent["phone"])
+
+# 3. Proxy Satın Al
+proxy = client.proxy_buy("datacenter", "TR", 30, 1)
+print(f"Proxy: {proxy['ip']}:{proxy['port']}")
+
+# 4. eSIM Satın Al
+esim = client.esim_buy("pkg_tr_1gb_7d")
+print("eSIM QR:", esim["qr_code_url"])
+
+# 5. Geçici Mail
+mail = client.mail_create(60)
+print("Geçici Mail:", mail["email"])
 ```
 
 ---
 
 ### 🟩 Node.js SDK
-Kurulum:
+
+**Kurulum:**
 ```bash
 npm install github:anindasms-dev/anindasms-sdk
 ```
-Örnek Kullanım:
+
+**Kullanım Örneği:**
 ```javascript
 const { AnindaSMS } = require("anindasms");
 
 const client = new AnindaSMS("SIZIN_API_KEYINIZ");
 
 async function main() {
-  const balance = await client.balance();
-  console.log("Bakiye:", balance.formatted);
-
+  // 1. SMS Onay
   const order = await client.createOrder("wa", "62");
-  console.log("Numara:", order.phone);
-
+  console.log("Telefon:", order.phone);
   const sms = await client.waitForCode(order.order_id);
   console.log("SMS Kodu:", sms.code);
 
-  await client.completeOrder(order.order_id);
+  // 2. Numara Kiralama
+  const rent = await client.rentBuy("wa", "62", 24);
+  console.log("Kiralık Numara:", rent.phone);
+
+  // 3. Proxy Satın Al
+  const proxy = await client.proxyBuy("datacenter", "TR", 30, 1);
+  console.log(`Proxy: ${proxy.ip}:${proxy.port}`);
+
+  // 4. eSIM Satın Al
+  const esim = await client.esimBuy("pkg_tr_1gb_7d");
+  console.log("eSIM QR:", esim.qr_code_url);
+
+  // 5. Geçici Mail
+  const mail = await client.mailCreate(60);
+  console.log("Geçici Mail:", mail.email);
 }
 
 main().catch(console.error);
@@ -645,33 +589,48 @@ main().catch(console.error);
 ---
 
 ### 🔷 C# / .NET SDK
-Projenize `csharp/AnindaSms.cs` dosyasını dahil edin (.NET 6+):
+
+Projenize `csharp/AnindaSms.csproj` dosyasını dahil edin veya `AnindaSms.cs` dosyasını referans verin:
+
 ```csharp
 using System;
 using AnindaSms;
 
 var client = new AnindaSmsClient("SIZIN_API_KEYINIZ");
 
-var balance = await client.GetBalanceAsync();
-Console.WriteLine($"Bakiye: {balance.GetProperty("formatted").GetString()}");
-
+// 1. SMS Onay
 var order = await client.CreateOrderAsync("wa", "62");
-Console.WriteLine($"Numara: {order.GetProperty("phone").GetString()}");
-
+Console.WriteLine($"Telefon: {order.GetProperty("phone").GetString()}");
 var sms = await client.WaitForCodeAsync(order.GetProperty("order_id").GetInt32());
-Console.WriteLine($"SMS Kodu: {sms.GetProperty("code").GetString()}");
+Console.WriteLine($"Kod: {sms.GetProperty("code").GetString()}");
 
-await client.DoneOrderAsync(order.GetProperty("order_id").GetInt32());
+// 2. Numara Kiralama
+var rent = await client.RentBuyAsync("wa", "62", 24);
+Console.WriteLine($"Kiralık Numara: {rent.GetProperty("phone").GetString()}");
+
+// 3. Proxy Satın Al
+var proxy = await client.ProxyBuyAsync("datacenter", "TR", 30, 1);
+Console.WriteLine($"Proxy: {proxy.GetProperty("ip").GetString()}:{proxy.GetProperty("port").GetInt32()}");
+
+// 4. eSIM Satın Al
+var esim = await client.EsimBuyAsync("pkg_tr_1gb_7d");
+Console.WriteLine($"eSIM QR: {esim.GetProperty("qr_code_url").GetString()}");
+
+// 5. Geçici Mail
+var mail = await client.MailCreateAsync(60);
+Console.WriteLine($"Geçici Mail: {mail.GetProperty("email").GetString()}");
 ```
 
 ---
 
 ### 🐹 Go SDK
-Kurulum:
+
+**Kurulum:**
 ```bash
 go get github.com/anindasms-dev/anindasms-sdk/go
 ```
-Örnek Kullanım:
+
+**Kullanım Örneği:**
 ```go
 package main
 
@@ -683,17 +642,12 @@ import (
 func main() {
 	client := anindasms.NewClient("SIZIN_API_KEYINIZ")
 
-	bal, err := client.Balance()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("Bakiye: %s\n", bal.Formatted)
-
+	// 1. SMS Onay
 	order, err := client.CreateOrder("wa", "62", "")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("Numara: %s (ID: %d)\n", order.Phone, order.OrderID)
+	fmt.Printf("Telefon: %s (#%d)\n", order.Phone, order.OrderID)
 
 	sms, err := client.WaitForCode(order.OrderID, 0, 0)
 	if err != nil {
@@ -701,7 +655,21 @@ func main() {
 	}
 	fmt.Printf("SMS Kodu: %s\n", *sms.Code)
 
-	_ = client.DoneOrder(order.OrderID)
+	// 2. Numara Kiralama
+	rent, _ := client.RentBuy("wa", "62", 24)
+	fmt.Printf("Kiralama Yanıtı: %s\n", string(rent))
+
+	// 3. Proxy
+	proxy, _ := client.ProxyBuy("datacenter", "TR", 30, 1, 0)
+	fmt.Printf("Proxy Yanıtı: %s\n", string(proxy))
+
+	// 4. eSIM
+	esim, _ := client.EsimBuy("pkg_tr_1gb_7d", 1)
+	fmt.Printf("eSIM Yanıtı: %s\n", string(esim))
+
+	// 5. Geçici Mail
+	mail, _ := client.MailCreate(60, "", "")
+	fmt.Printf("Mail Yanıtı: %s\n", string(mail))
 }
 ```
 
@@ -709,8 +677,8 @@ func main() {
 
 ## 📄 Lisans & Destek
 
-Bu kütüphane ve dokümantasyon [MIT Lisansı](LICENSE) altında açık kaynak olarak sunulmuştur.
+Bu SDK ve dokümantasyon [MIT Lisansı](LICENSE) kapsamında açık kaynak olarak yayınlanmıştır.
 
-* **Web Sitesi:** [anindasms.com](https://anindasms.com)
-* **API Belgeleri Web Görünümü:** [anindasms.com/api](https://anindasms.com/api)
-* **Destek & İletişim:** destek@anindasms.com / support@anindasms.com
+* **Resmi Web Sitesi:** [anindasms.com](https://anindasms.com)
+* **Web Dokümantasyonu:** [anindasms.com/api](https://anindasms.com/api)
+* **Müşteri & API Destek:** support@anindasms.com / destek@anindasms.com
